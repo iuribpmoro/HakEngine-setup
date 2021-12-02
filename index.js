@@ -123,12 +123,17 @@ const runAutomap = async (targetURL) => {
     console.log(result);
 }
 
+const shutdown = async () => {
+    await runCommand("poweroff");
+    // console.log("Shutdown!");
+}
+
 /* ------------------------------ Main Function ----------------------------- */
 
 (async function main(){
     const message = await handleSQS();
 
-    if (!message) return;
+    if (!message) await shutdown();
 
     const parsedMessage = JSON.parse(message);
 
