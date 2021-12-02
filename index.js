@@ -124,7 +124,7 @@ const runAutomap = async (targetURL) => {
 }
 
 const shutdown = async () => {
-    await runCommand("init 0");
+    await runCommand("poweroff -f");
     // console.log("Shutdown!");
 }
 
