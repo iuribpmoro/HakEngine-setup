@@ -12,7 +12,7 @@ git pull
 cd $HAK_DIRECTORY/HakEngine-setup
 git pull
 cp $HAK_DIRECTORY/.env $HAK_DIRECTORY/HakEngine-setup/
-yarn
+/usr/local/bin/yarn
 
 cd $HAK_DIRECTORY/HakEngine-setup
-node index.js
+/usr/bin/node index.js

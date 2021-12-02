@@ -16,7 +16,12 @@ const getSQSContent = async () => {
         QueueUrl: "https://sqs.us-east-1.amazonaws.com/514234370277/TargetList.fifo"
     };
 
-    return await sqs.receiveMessage(params).promise();
+    const result = await sqs.receiveMessage(params).promise();
+
+    const messages = result.Messages
+    console.log(messages);
+
+    return messages
 }
 
 const deleteMessage = async (ReceiptHandle) => {    
@@ -49,28 +54,33 @@ const releaseMessage = async (ReceiptHandle) => {
 /* ---------------------------- Handle Functions ---------------------------- */
 
 const handleSQS = async () => {
-    const result = await getSQSContent();
+    let hasMessages = 1;
+    let messagesBody = [];
 
-    const messages = result.Messages;
-    if(!messages || !messages.length) {
-        console.log("No messages");
+    while (hasMessages === 1) {
+        console.log("Foi para o SQS");
+        const messages = await getSQSContent();
+        console.log("Saiu do SQS");
 
-        return;
+
+        // console.log(messages);
+
+        if(!messages || !messages.length) {
+            console.log("No messages");
+            hasMessages = 0;
+        } else {
+            // const receiptHandle = message.ReceiptHandle;
+            
+            // await deleteMessage(receiptHandle);
+        
+            // const messageBody = message.Body;
+        
+            // messagesBody.push(messageBody);
+        }
+
     }
-    
 
-    const messageToProcess = messages[0]
-    const receiptHandle = messageToProcess.ReceiptHandle;
-    
-    const deleteResult = await deleteMessage(receiptHandle);
-
-    const messageBody = messageToProcess.Body;
-
-    // console.log(messageBody);
-
-    // console.log(deleteResult);
-
-    return messageBody;
+    // return messagesBody;
 }
 
 /* ---------------------------- Command Functions --------------------------- */
@@ -123,22 +133,29 @@ const runAutomap = async (targetURL) => {
     console.log(result);
 }
 
+const runScans = async (targets) => {
+
+}
+
 /* ------------------------------ Main Function ----------------------------- */
 
 (async function main(){
-    const message = await handleSQS();
+    const messagesBody = await handleSQS();
 
-    if (!message) return;
+    // if (messagesBody === -1) return;
 
-    const parsedMessage = JSON.parse(message);
+    // for (const messageBody of messagesBody) {
+    //     const parsedMessage = JSON.parse(messageBody);
+        
+    //     const targetURL = parsedMessage.URL;
+    //     const scanTimestamp = parsedMessage.timestamp;
+    //     const scanId = `${targetURL}-${scanTimestamp}`;
+    
+    //     // console.log(scanId);
+    
+    //     await runTestCommand(targetURL, scanId);
+    // }
 
-    const targetURL = parsedMessage.URL;
-    const scanTimestamp = parsedMessage.timestamp;
-    const scanId = `${targetURL}-${scanTimestamp}`;
-
-    console.log(scanId);
-
-    await runTestCommand(targetURL, scanId);
     // await runWebmap(targetURL);
 
 })()
