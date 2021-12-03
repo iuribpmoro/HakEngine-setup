@@ -130,10 +130,13 @@ const shutdown = async () => {
 
 /* ------------------------------ Main Function ----------------------------- */
 
-(async function main(){
+async function main(){
     const message = await handleSQS();
 
-    if (!message) await shutdown();
+    if (!message) {
+        await shutdown();
+        return
+    }
 
     const parsedMessage = JSON.parse(message);
 
@@ -146,4 +149,6 @@ const shutdown = async () => {
     await runTestCommand(targetURL, scanId);
     // await runWebmap(targetURL);
 
-})()
+}
+
+main().catch(console.error)
