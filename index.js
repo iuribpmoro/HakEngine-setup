@@ -194,8 +194,8 @@ async function main(){
 
     console.log(scanId);
 
-    // await runTestCommand(targetURL, scanId);
-    await runWebmap(targetURL, scanId);
+    await runTestCommand(targetURL, scanId);
+    // await runWebmap(targetURL, scanId);
 
 }
 
