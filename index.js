@@ -135,7 +135,7 @@ const runWebmap = async (targetURL, scanId) => {
 
         const distFolderPath = path.join(__dirname, relativePath);
     
-        fs.readdir(distFolderPath, (err, files) => {
+        fs.readdir(distFolderPath, async (err, files) => {
     
             if(!files || files.length === 0) {
                 console.log(`provided folder '${distFolderPath}' is empty or does not exist.`);
