@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const path = require("path"); // from node.js
 const util = require('util');
 
 require('dotenv').config();
@@ -118,11 +119,51 @@ const runTestCommand = async (targetURL, scanId) => {
     return result
 }
 
-const runWebmap = async (targetURL) => {
-    const wordlist = "/home/iuribpmoro/LIN-SPACE/hacking/tools/wordlists/raft-small-directories.txt"
-    const command = `/home/iuribpmoro/LIN-SPACE/hacking/tools/Webmap/Webmap.sh ${targetURL} ${wordlist}`;
+const runWebmap = async (targetURL, scanId, targetURL) => {
+    const wordlist = "/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt"
+    const command = `/home/kali/HakEngine/scripts/Webmap.sh ${targetURL} ${wordlist}`;
     
-    const result = await runCommand(command);
+    await runCommand(command);
+
+    const location = `./${targetURL}/recon`;
+    const insideDirectories = ['', 'gowitness', 'scans']
+
+    let results = [];
+
+    for (const dir of insideDirectories) {
+        const relativePath = `${location}/${dir}/`;
+
+        const distFolderPath = path.join(__dirname, relativePath);
+    
+        fs.readdir(distFolderPath, (err, files) => {
+    
+            if(!files || files.length === 0) {
+                console.log(`provided folder '${distFolderPath}' is empty or does not exist.`);
+                console.log('Make sure your project was compiled!');
+                return;
+            }
+          
+            // for each file in the directory
+            for (const fileName of files) {
+          
+                // get the full path of the file
+                const filePath = path.join(distFolderPath, fileName);
+                
+                // ignore if directory
+                if (fs.lstatSync(filePath).isDirectory()) {
+                    continue;
+                }
+
+                const uploadFilename = `${relativePath}/${dir}/${fileName}`;
+
+                const result = await uploadOutput(uploadFilename, filePath);
+
+                results.push(result);
+            }
+        });
+    }
+
+    return results;
 }
 
 const runAutomap = async (targetURL) => {
@@ -154,7 +195,7 @@ async function main(){
     console.log(scanId);
 
     await runTestCommand(targetURL, scanId);
-    // await runWebmap(targetURL);
+    await runWebmap(targetURL, scanId, targetURL);
 
 }
 
