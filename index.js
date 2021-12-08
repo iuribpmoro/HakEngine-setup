@@ -119,7 +119,7 @@ const runTestCommand = async (targetURL, scanId) => {
     return result
 }
 
-const runWebmap = async (targetURL, scanId, targetURL) => {
+const runWebmap = async (targetURL, scanId) => {
     const wordlist = "/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt"
     const command = `/home/kali/scripts/Webmap/Webmap.sh ${targetURL} ${wordlist}`;
     
@@ -154,7 +154,7 @@ const runWebmap = async (targetURL, scanId, targetURL) => {
                     continue;
                 }
 
-                const uploadFilename = `${relativePath}/${dir}/${fileName}`;
+                const uploadFilename = `${scanId}/${dir}/${fileName}`;
 
                 const result = await uploadOutput(uploadFilename, filePath);
 
@@ -195,7 +195,7 @@ async function main(){
     console.log(scanId);
 
     // await runTestCommand(targetURL, scanId);
-    await runWebmap(targetURL, scanId, targetURL);
+    await runWebmap(targetURL, scanId);
 
 }
 
