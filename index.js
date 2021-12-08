@@ -188,7 +188,7 @@ async function main(){
     const message = await handleSQS();
 
     if (!message) {
-        await shutdown();
+        // await shutdown();
         return
     }
 
