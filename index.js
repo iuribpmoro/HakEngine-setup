@@ -86,18 +86,9 @@ const runCommand = async (command) => {
     };
 }
 
-const runTestCommand = async (targetURL, scanId) => {
-    const scriptPath = './'
-    const command = `${scriptPath}script.sh ${targetURL}`;
-    
-    await runCommand(command);
-
+const uploadOutput = async (uploadFilename, filePath) => {
     const s3 = new AWS.S3();
-
-    const destFilename = "result.txt"
-    const uploadFilename = `${scanId}/${destFilename}`
-
-    const filePath = scriptPath + 'result.txt'
+    
     const fileContent = fs.readFileSync(filePath);
 
     const params = {
@@ -107,6 +98,22 @@ const runTestCommand = async (targetURL, scanId) => {
     };
 
     const result = await s3.upload(params).promise();
+
+    return result
+}
+
+const runTestCommand = async (targetURL, scanId) => {
+    const scriptPath = './'
+    const command = `${scriptPath}script.sh ${targetURL}`;
+    
+    await runCommand(command);
+
+    const destFilename = "result.txt"
+    const uploadFilename = `${scanId}/${destFilename}`
+
+    const filePath = scriptPath + 'result.txt'
+
+    const result = await uploadOutput(uploadFilename, filePath);
 
     return result
 }
