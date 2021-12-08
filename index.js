@@ -121,7 +121,7 @@ const runTestCommand = async (targetURL, scanId) => {
 
 const runWebmap = async (targetURL, scanId, targetURL) => {
     const wordlist = "/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt"
-    const command = `/home/kali/HakEngine/scripts/Webmap.sh ${targetURL} ${wordlist}`;
+    const command = `/home/kali/scripts/Webmap/Webmap.sh ${targetURL} ${wordlist}`;
     
     await runCommand(command);
 
@@ -194,7 +194,7 @@ async function main(){
 
     console.log(scanId);
 
-    await runTestCommand(targetURL, scanId);
+    // await runTestCommand(targetURL, scanId);
     await runWebmap(targetURL, scanId, targetURL);
 
 }
