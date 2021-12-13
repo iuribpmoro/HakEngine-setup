@@ -14,5 +14,5 @@ git pull
 cp $HAK_DIRECTORY/.env $HAK_DIRECTORY/HakEngine-setup/
 yarn
 
-cd $KALI_DIRECTORY/scans
-node $HAK_DIRECTORY/HakEngine-setup/index.js
+cd $HAK_DIRECTORY/HakEngine-setup/
+node index.js
