@@ -82,6 +82,9 @@ const runCommand = async (command) => {
     try {
         const { stdout, stderr } = await exec(`${command}`);
         
+        console.log("STDOUT:" + stdout);
+        console.log("STDERR:" + stderr);
+
         if (stdout) return stdout;
         if (stderr) return stderr;
     } catch (err) {
@@ -124,7 +127,7 @@ const runTestCommand = async (targetURL, scanId) => {
 const runWebmap = async (targetURL, scanId) => {
     const wordlist = "/usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt"
     const command = `/home/kali/scripts/Webmap/Webmap.sh ${targetURL} ${wordlist}`;
-    
+
     await runCommand(command);
 
     const location = `./${targetURL}/recon`;
@@ -200,7 +203,6 @@ async function main(){
     const scanTimestamp = parsedMessage.timestamp;
     const scanId = `${targetURL}-${scanTimestamp}`;
     
-    console.log(targetURL);
     console.log(scanId);
 
     // await runTestCommand(targetURL, scanId);
