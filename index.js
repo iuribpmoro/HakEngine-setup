@@ -3,7 +3,9 @@ const fs = require('fs');
 const path = require("path"); // from node.js
 const util = require('util');
 
-require('dotenv').config();
+require('dotenv').config({
+    path: path.join(__dirname, ".env")
+});
 const exec = util.promisify(require('child_process').exec);
 
 /* ------------------------------ SQS Functions ----------------------------- */
