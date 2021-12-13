@@ -85,7 +85,7 @@ const runCommand = async (command) => {
         if (stdout) return stdout;
         if (stderr) return stderr;
     } catch (err) {
-       console.error(err);
+        console.error(err);
     };
 }
 
@@ -199,7 +199,8 @@ async function main(){
     const targetURL = parsedMessage.URL;
     const scanTimestamp = parsedMessage.timestamp;
     const scanId = `${targetURL}-${scanTimestamp}`;
-
+    
+    console.log(targetURL);
     console.log(scanId);
 
     // await runTestCommand(targetURL, scanId);
