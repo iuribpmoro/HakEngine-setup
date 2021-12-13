@@ -81,9 +81,6 @@ const handleSQS = async () => {
 const runCommand = async (command) => {
     try {
         const { stdout, stderr } = await exec(`${command}`);
-        
-        console.log("STDOUT:" + stdout);
-        console.log("STDERR:" + stderr);
 
         if (stdout) return stdout;
         if (stderr) return stderr;
@@ -168,6 +165,9 @@ const runWebmap = async (targetURL, scanId) => {
         });
     }
 
+    const rmCommand = `rm -rf ./${targetURL}`;
+    await runCommand(rmCommand);
+
     return results;
 }
 
@@ -193,7 +193,7 @@ async function main(){
     const message = await handleSQS();
 
     if (!message) {
-        // await shutdown();
+        await shutdown();
         return
     }
 
